@@ -29,7 +29,7 @@ const SA: React.FC<{ f: number }> = ({ f }) => {
   const bend: BP = { ...STAND, lean: 26, headX: 34, lArmX: -10, lElbow: -30, rArmX: -40, rElbow: -40, rArmZ: 10, lKnee: 14, rKnee: 14 };
   const p = mixBP(STAND, bend, sm(30, 110, f));
   return <VStage f={f} len={T.b} exp={1.35} fog={["#0a0e1a", 18, 120]} shots={[
-    [0, C(P(fx - 0.5, fz + 2.6, 0.5), P(fx + 4.5, fz - 10, 1.2), 40, 0.04), C(P(fx - 0.3, fz + 1.6, 0.75), P(fx + 4.5, fz - 10, 1.4), 38, 0.04)],
+    [0, C(P(fx - 1.0, fz + 7.0, 1.5), P(fx + 2.5, fz - 6, 0.0), 44, 0.04), C(P(fx - 0.2, fz + 1.2, 0.8), P(fx + 4.2, fz - 10, 1.5), 36, 0.04)],
     [250, C(P(fx - 1.5, fz + 4, 2.6), P(fx + 4, fz - 10, 1.0), 42, 0.04), C([-30, 22, 76], [-5, 0, 12], 42, 0.05)]]}>
     <NightLights />
     <FarmWorld f={f} farm={{ lit: [0.9, 0.7, 0.8, 0.3, 0.6, 0.4], smoke: 0.7 }} />
