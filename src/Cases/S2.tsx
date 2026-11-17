@@ -9,7 +9,7 @@ export const S2_FRAMES = 3420;
 const WORDS = (WJ as any).words;
 const T = { a: 0, a2: 150, b: 340, c: 640, d: 940, e: 1150, f: 1420, g: 1630, h: 1880, i: 2190, j: 2350, k: 2600, l: 2740, m: 2990, n: 3170 };
 
-const NECK = 1.4;
+const NECK = 1.55;
 const PIN: BP = { ...STAND, lean: 2, headX: 10, lArmX: 14, lArmZ: -4, lElbow: -8, rArmX: 14, rArmZ: 4, rElbow: -8, lLegZ: -1, rLegZ: 1 };
 const walk = (f: number, amp = 0.8): BP => walkBP((f / FPS) * Math.PI * 2 * 0.8, amp);
 /** John Lee standing on the trap with the noose on */
@@ -36,10 +36,10 @@ const SA1: React.FC<{ f: number }> = ({ f }) => {
     <Hangman f={f} pull={lever} />
   </VStage>;
 };
-const XMark: React.FC<{ f: number; a: number; y?: number }> = ({ f, a, y = 520 }) => { if (f < a) return null; const k = ip(f, [a, a + 8], [2, 1], (t) => t * t), o = ip(f, [a, a + 4], [0, 1]); return <div style={{ position: "absolute", top: y, width: "100%", textAlign: "center", ...font, fontSize: 260, color: RED, opacity: o, transform: `scale(${k})`, WebkitTextStroke: `10px ${INK}`, paintOrder: "stroke fill", lineHeight: 1 }}>✕</div>; };
+const XMark: React.FC<{ f: number; a: number; y?: number; b?: number }> = ({ f, a, y = 520, b = 1e9 }) => { if (f < a || f > b) return null; const k = ip(f, [a, a + 8], [2, 1], (t) => t * t), o = ip(f, [a, a + 4], [0, 1]); return <div style={{ position: "absolute", top: y, width: "100%", textAlign: "center", ...font, fontSize: 260, color: RED, opacity: o, transform: `scale(${k})`, WebkitTextStroke: `10px ${INK}`, paintOrder: "stroke fill", lineHeight: 1 }}>✕</div>; };
 const Attempt: React.FC<{ f: number; a: number; b: number; n: number }> = ({ f, a, b, n }) => { if (f < a || f > b) return null; const k = ip(f, [a, a + 8], [0, 1], eo), o = ip(f, [b - 6, b], [1, 0]);
   return <div style={{ position: "absolute", top: 240, width: "100%", textAlign: "center", opacity: k * o }}><div style={{ ...font, fontWeight: 600, fontSize: 46, letterSpacing: 12, color: "#d8d8dc", textShadow: "0 3px 10px #000" }}>ATTEMPT</div><div style={{ ...font, fontSize: 190, lineHeight: 1, WebkitTextStroke: `8px ${INK}`, paintOrder: "stroke fill" }}>{n}<span style={{ color: "#888", fontSize: 120 }}>/3</span></div></div>; };
-const HA1: React.FC<{ f: number }> = ({ f }) => <>{PULLS.map((t, i) => <React.Fragment key={i}><Attempt f={f} a={t - 8} b={t + 46} n={i + 1} /><XMark f={f} a={t + 22} /></React.Fragment>)}</>;
+const HA1: React.FC<{ f: number }> = ({ f }) => <>{PULLS.map((t, i) => <React.Fragment key={i}><Attempt f={f} a={t - 8} b={t + 46} n={i + 1} /><XMark f={f} a={t + 22} b={t + 46} /></React.Fragment>)}</>;
 /* A2 — England, 1885: Exeter prison at dawn */
 const SA2: React.FC<{ f: number }> = ({ f }) => <VStage f={f} len={T.b - T.a2} exp={1.1} fog={["#8a8a98", 30, 160]} shots={[[0, C([3, 1.6, 26], [0, 6, -6], 40, 0.04), C([2, 1.7, 20], [0, 6.5, -6], 38, 0.04)]]}>
   <PrisonFront f={f} sky="dusk" />
@@ -136,7 +136,7 @@ const HG: React.FC<{ f: number }> = ({ f }) => <Tag f={f} a={DROP_G + 6} b={240}
 const P2 = 70, P3 = 196;
 const SH: React.FC<{ f: number }> = ({ f }) => {
   const lever = Math.max(pullAt(f, P2), pullAt(f, P3));
-  return <VStage f={f} len={T.i - T.h} exp={1.15} fog={["#0a0a0c", 6, 18]} shake={[P2 + 12, P3 + 12]} shots={[[0, C([2.4, 1.3, 2.2], [0.6, 1.1, 0], 42, 0.04), C([2.2, 1.3, 2.0], [0.6, 1.15, 0], 40, 0.04)], [P3 - 20, C([0.25, 1.62, 1.1], [0, 1.55, 0], 34, 0.04), C([0.2, 1.6, 0.95], [0, 1.56, 0], 30, 0.04)]]}>
+  return <VStage f={f} len={T.i - T.h} exp={1.15} fog={["#0a0a0c", 6, 18]} shake={[P2 + 12, P3 + 12]} shots={[[0, C([2.4, 1.3, 2.2], [0.6, 1.1, 0], 42, 0.04), C([2.2, 1.3, 2.0], [0.6, 1.15, 0], 40, 0.04)], [P3 - 20, C([0.55, 1.75, 2.1], [0, 1.65, 0], 38, 0.04), C([0.45, 1.72, 1.8], [0, 1.66, 0], 36, 0.04)]]}>
     <Gallows f={f} lever={lever} noose={[0, NECK, 0.02]} />
     <group position={[0, jolt(f, P2) + jolt(f, P3), 0]}><Lee f={f} eyes={f > P3 + 20 ? "scared" : "closed"} mouth={f > P3 + 20 ? "fear" : "flat"} /></group>
     <Warder f={f} pos={[-0.95, 0, 0.75]} ry={0.3} /><Warder f={f} pos={[0.95, 0, -0.75]} ry={-0.3} />
@@ -144,7 +144,7 @@ const SH: React.FC<{ f: number }> = ({ f }) => {
   </VStage>;
 };
 const HH: React.FC<{ f: number }> = ({ f }) => <>
-  <Attempt f={f} a={0} b={P3 - 10} n={2} /><XMark f={f} a={P2 + 60} y={560} />
+  <Attempt f={f} a={0} b={P3 - 10} n={2} /><XMark f={f} a={P2 + 60} y={560} b={P3 - 12} />
   <Attempt f={f} a={P3 - 10} b={310} n={3} /><XMark f={f} a={P3 + 76} y={560} />
 </>;
 /* I — the prison doctor refuses */
